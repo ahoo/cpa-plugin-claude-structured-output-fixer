@@ -1,7 +1,12 @@
 # cpa-plugin-claude-structured-output-fixer
 
-CLIProxyAPI request normalizer plugin for prompt Stop-hook structured output
-on the claude→codex translation edge.
+Legacy CLIProxyAPI request normalizer plugin for prompt Stop-hook structured
+output on the claude→codex translation edge.
+
+> [!IMPORTANT]
+> CLIProxyAPI `v7.2.150` and later handle this normalization natively. This
+> plugin is only for legacy hosts older than `v7.2.150` and is not needed on
+> current releases.
 
 When a prompt Stop hook requests structured output with
 `text.format = {type: "json_schema", name: "cli_proxy_structured_output",
@@ -18,7 +23,9 @@ request passes instead of failing.
   json_schema with `strict: true` and a required/properties mismatch.
 - Everything else passes through untouched.
 
-## Install
+## Legacy host installation
+
+Use this only with CLIProxyAPI versions older than `v7.2.150`:
 
 ```yaml
 plugins:
@@ -44,14 +51,16 @@ Debian/glibc toolchain only (musl `.so` fails to `dlopen`):
 ./build.sh
 ```
 
-## Upstream note
+## Upstream status
 
-This is a workaround for a host translator gap: the claude→codex request
-translator forwards `text.format.strict: true` verbatim while the generated
-schema does not satisfy strict requirements. A proper host-side fix would
-complete `required` (or drop `strict`) during translation. Until then, this
-plugin keeps Stop-hook structured output working. **Not submitted to the
-official plugin store** — tracked for removal once the host fixes it.
+This plugin worked around a host translator gap: the claude→codex request
+translator forwarded `text.format.strict: true` verbatim while the generated
+schema did not satisfy strict requirements. CLIProxyAPI fixed this natively in
+`v7.2.150`; current releases no longer require the plugin.
+
+The plugin remains available only for legacy hosts older than `v7.2.150`. It is
+not submitted to the official plugin store, and no new release is planned for
+this documentation update.
 
 ## Test
 
